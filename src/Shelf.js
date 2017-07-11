@@ -88,7 +88,7 @@ class Shelf extends Component {
 					</ol>
 				</div>
 			</div>
-		);
+		) ;
 	}
 }
 
