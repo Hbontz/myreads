@@ -18,5 +18,5 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
-  "homepage": "https://github.com/Hbontz/myreads.git"
+  "homepage": "https://hbontz.github.io/myreads"
 }
