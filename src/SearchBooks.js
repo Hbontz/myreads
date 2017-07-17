@@ -33,12 +33,8 @@ class SearchBooks extends Component {
           </div>
         </div>
         <Shelf
-          shelfTitle={" "}
-          books={
-            this.state.searchList
-              ? this.state.searchList
-              : this.props.searchList
-          }
+          shelfTitle={""}
+          books={this.state.searchList}
           shelfChange={(book, shelf) => {
             this.props.onShelfMove(book, shelf);
           }}

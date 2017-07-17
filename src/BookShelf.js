@@ -36,9 +36,7 @@ function BookShelf(props) {
         </div>
       </div>
       <div className="open-search">
-        <Link className="open-search" to="/search">
-          Add a book
-        </Link>
+        <Link className="open-search" to="/search" />
       </div>
     </div>
   );

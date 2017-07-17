@@ -1,5 +1,6 @@
 import React from "react";
 import { Route } from "react-router-dom";
+import _ from "lodash";
 import SearchBooks from "./SearchBooks";
 import BookShelf from "./BookShelf";
 import * as BooksAPI from "./BooksAPI";
@@ -21,6 +22,8 @@ class BooksApp extends React.Component {
         if (books && books.length) {
           this.updateShelfValue(books);
           this.setState({ searchList: books });
+        } else {
+          this.setState({ searchList: [] });
         }
       });
     } else {
@@ -29,15 +32,26 @@ class BooksApp extends React.Component {
   }
   shelfMove(book, shelf) {
     BooksAPI.update(book, shelf);
-    BooksAPI.getAll().then(books => {
-      this.setState({ bookList: books });
-    });
+    book.shelf = shelf;
+    location.pathname === "/search"
+      ? this.setState(prevState => ({
+          bookList: [...prevState.bookList, book]
+        }))
+      : this.setState(prevState => ({
+          bookList: prevState.bookList
+        }));
+    this.setState(prevState => ({
+      searchList: prevState.searchList
+    }));
   }
-  updateShelfValue(booksArr) {
-    for (let i = 0; i < booksArr.length; i++) {
-      for (let j = 0; j < this.state.bookList.length; j++) {
-        if (booksArr[i].id === this.state.bookList[j].id) {
-          booksArr[i].shelf = this.state.bookList[j].shelf;
+
+  updateShelfValue(searchArr) {
+    let bookList = this.state.bookList;
+    for (let i = 0; i < searchArr.length; i++) {
+      searchArr[i].shelf = "none";
+      for (let j = 0; j < bookList.length; j++) {
+        if (searchArr[i].id === bookList[j].id) {
+          searchArr[i].shelf = bookList[j].shelf;
         }
       }
     }
@@ -61,10 +75,10 @@ class BooksApp extends React.Component {
           path="/search"
           render={() =>
             <SearchBooks
-              onSearchTerm={searchTerm => {
+              onSearchTerm={_.debounce(searchTerm => {
                 this.bookSearch(searchTerm);
-              }}
-              searchList={this.state.searchList}
+              }, 600)}
+              searchList={this.state.searchList ? this.state.searchList : []}
               onShelfMove={(book, shelf) => {
                 this.shelfMove(book, shelf);
               }}
