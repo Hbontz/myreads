@@ -33,10 +33,9 @@ class BooksApp extends React.Component {
   shelfMove(book, shelf) {
     BooksAPI.update(book, shelf);
     book.shelf = shelf;
+    let filterBook = this.state.bookList.filter(bk => bk.id !== book.id);
     location.pathname === "/search"
-      ? this.setState(prevState => ({
-          bookList: [...prevState.bookList, book]
-        }))
+      ? this.setState({ bookList: [...filterBook, book] })
       : this.setState(prevState => ({
           bookList: prevState.bookList
         }));
@@ -77,7 +76,7 @@ class BooksApp extends React.Component {
             <SearchBooks
               onSearchTerm={_.debounce(searchTerm => {
                 this.bookSearch(searchTerm);
-              }, 600)}
+              }, 300)}
               searchList={this.state.searchList ? this.state.searchList : []}
               onShelfMove={(book, shelf) => {
                 this.shelfMove(book, shelf);
